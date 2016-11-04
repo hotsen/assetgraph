@@ -811,4 +811,26 @@ describe('assets/Asset', function () {
                 expect(assetGraph, 'to contain relation', {href: '#selffragment'});
             });
     });
+
+    it('should remove itself from the top level assets when inlined', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/externalScript/'})
+            .loadAssets('index.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph._assets, 'to have length', 2);
+                assetGraph.findRelations({type: 'HtmlScript'})[0].inline();
+                expect(assetGraph._assets, 'to have length', 1);
+            });
+    });
+
+    it('should add itself to the top level assets when externalized', function () {
+        return new AssetGraph({root: __dirname + '/../../testdata/assets/Asset/inlineScript/'})
+            .loadAssets('index.html')
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph._assets, 'to have length', 1);
+                assetGraph.findRelations({type: 'HtmlScript'})[0].url = assetGraph.root + 'script.js';
+                expect(assetGraph._assets, 'to have length', 2);
+            });
+    });
 });
