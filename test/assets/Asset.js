@@ -829,7 +829,7 @@ describe('assets/Asset', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph._assets, 'to have length', 1);
-                assetGraph.findRelations({type: 'HtmlScript'})[0].url = assetGraph.root + 'script.js';
+                assetGraph.findRelations({type: 'HtmlScript'})[0].to.url = assetGraph.root + 'script.js';
                 expect(assetGraph._assets, 'to have length', 2);
             });
     });
